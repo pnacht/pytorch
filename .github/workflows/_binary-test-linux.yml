@@ -68,10 +68,18 @@ on:
         required: true
         description: Github Token
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ${{ inputs.runs_on }}
     timeout-minutes: 240
+
+    permissions:
+      issues: read        # setup-ssh, filter-test-configs
+      pull-requests: read # setup-ssh
+
     env:
       PYTORCH_ROOT: ${{ inputs.PYTORCH_ROOT }}
       BUILDER_ROOT: ${{ inputs.BUILDER_ROOT }}

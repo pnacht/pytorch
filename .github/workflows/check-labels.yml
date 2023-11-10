@@ -19,6 +19,9 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' }}
   cancel-in-progress: true
@@ -27,6 +30,11 @@ jobs:
   check-labels:
     name: Check labels
     runs-on: linux.20_04.4x
+
+    permissions:
+      issues: write        # check_labels
+      pull-requests: write # check_labels
+
     steps:
       - name: Checkout PyTorch
         uses: pytorch/pytorch/.github/actions/checkout-pytorch@main

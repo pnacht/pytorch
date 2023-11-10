@@ -31,6 +31,9 @@ on:
         type: string
         default: ""
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' }}
   cancel-in-progress: true
@@ -39,6 +42,10 @@ jobs:
   # TODO: Figure out how to migrate this job to M1 runner
   ios-build-test:
     name: ios-build-test
+
+    permissions:
+      issues: read  # filter-test-configs
+
     uses: ./.github/workflows/_ios-build-test.yml
     with:
       trigger-event: ${{ github.event_name }}

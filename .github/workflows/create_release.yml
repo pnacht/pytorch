@@ -10,6 +10,9 @@ on:
   pull_request:
     paths: [.github/workflows/create_release.yml]
 
+permissions:
+  contents: read
+
 jobs:
   release:
     if: ${{ github.repository == 'pytorch/pytorch' }}

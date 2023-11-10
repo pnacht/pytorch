@@ -15,6 +15,9 @@ on:
       - v[0-9]+.[0-9]+.[0-9]+-rc[0-9]+
       - ciflow/nightly/*
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' }}
   cancel-in-progress: true
@@ -34,6 +37,11 @@ jobs:
     runs-on: [self-hosted, linux.2xlarge]
     environment: ${{ (github.ref == 'refs/heads/main' || startsWith(github.event.ref, 'refs/tags/v')) && 'docker-build' || '' }}
     timeout-minutes: 240
+
+    permissions:
+      issues: read        # setup-ssh
+      pull-requests: read # setup-ssh
+
     strategy:
       matrix:
         include:

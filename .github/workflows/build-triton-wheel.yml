@@ -23,6 +23,9 @@ on:
       - .ci/docker/ci_commit_pins/triton.txt
       - .ci/docker/ci_commit_pins/triton-rocm.txt
 
+permissions:
+  contents: read      
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' }}
   cancel-in-progress: true
@@ -31,6 +34,11 @@ jobs:
   build-wheel:
     name: "Build Triton Wheel"
     runs-on: [self-hosted, linux.2xlarge]
+
+    permissions:
+      issues: read        # setup-ssh
+      pull-requests: read # setup-ssh
+
     strategy:
       fail-fast: false
       matrix:
@@ -177,6 +185,12 @@ jobs:
   build-conda:
     name: "Build Triton Conda"
     runs-on: [self-hosted, linux.2xlarge]
+
+    permissions:
+      issues: read        # setup-ssh
+      pull-requests: read # setup-ssh
+      actions: read       # get-workflow-job-id
+
     strategy:
       fail-fast: false
       matrix:

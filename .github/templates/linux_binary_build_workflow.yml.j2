@@ -28,6 +28,9 @@ on:
 {%- endfor %}
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   # Needed for conda builds
   {%- if "aarch64" in build_environment %}
@@ -51,6 +54,9 @@ env:
 jobs:
 {%- for config in build_configs %}
   !{{ config["build_name"] }}-build:
+    permissions:
+      issues: read
+      pull-requests: read
     if: ${{ github.repository_owner == 'pytorch' }}
     uses: ./.github/workflows/_binary-build-linux.yml
     with:!{{ upload.binary_env_as_input(config) }}
@@ -71,6 +77,9 @@ jobs:
     if: ${{ github.repository_owner == 'pytorch' }}
     needs: !{{ config["build_name"] }}-build
 {%- if config["gpu_arch_type"] != "rocm" %}
+    permissions:
+      issues: read
+      pull-requests: read
     uses: ./.github/workflows/_binary-test-linux.yml
     with:!{{ upload.binary_env_as_input(config) }}
       build_name: !{{ config["build_name"] }}

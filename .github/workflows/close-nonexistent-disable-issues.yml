@@ -4,10 +4,17 @@ on:
   schedule:
     - cron: 5 22 * * 5  # this should be about 3PM PT on Friday
 
+permissions:
+  contents: read
+
 jobs:
   close-nonexistent-disable-issues:
     if: github.repository_owner == 'pytorch'
     runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+
     steps:
       - name: Checkout PyTorch
         uses: pytorch/pytorch/.github/actions/checkout-pytorch@main

@@ -9,6 +9,9 @@ on:
         description: |
           A JSON description of what configs to run later on.
 
+permissions:
+  contents: read
+
 defaults:
   run:
     shell: bash -e -l {0}
@@ -16,6 +19,10 @@ defaults:
 jobs:
   filter:
     runs-on: [self-hosted, linux.large]
+
+    permissions:
+      issues: read  # filter-test-configs
+
     outputs:
       test-matrix: ${{ steps.filter.outputs.test-matrix }}
       is-test-matrix-empty: ${{ steps.filter.outputs.is-test-matrix-empty }}

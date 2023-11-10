@@ -27,9 +27,16 @@ on:
 env:
   GIT_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
 
+permissions:
+  contents: read
+
 jobs:
   filter:
     runs-on: [self-hosted, linux.large]
+
+    permissions:
+      issues: read  # filter-test-configs
+
     outputs:
       test-matrix: ${{ steps.filter.outputs.test-matrix }}
       is-test-matrix-empty: ${{ steps.filter.outputs.is-test-matrix-empty }}
@@ -56,6 +63,11 @@ jobs:
       matrix: ${{ fromJSON(needs.filter.outputs.test-matrix) }}
       fail-fast: false
     runs-on: ${{ matrix.runner }}
+
+    permissions:
+      issues: read        # setup-ssh
+      pull-requests: read # setup-ssh
+
     steps:
       - name: Setup SSH (Click me for login details)
         uses: pytorch/test-infra/.github/actions/setup-ssh@main

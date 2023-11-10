@@ -4,12 +4,19 @@ on:
   pull_request:
     types: [opened, ready_for_review, reopened]
 
+permissions:
+  contents: read
+
 jobs:
   auto-request-review:
     # Don't run on forked repos
     if: ${{ !github.event.pull_request.head.repo.fork }}
     name: Auto Request Review
     runs-on: ubuntu-latest
+
+    permissions:
+      issues: write        # auto-request-review
+      pull-requests: write # auto-request-review
     steps:
       - name: Request review based on files changes and/or groups the author belongs to
         # v0.7.0

@@ -75,10 +75,18 @@ on:
         required: true
         description: Github Token
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ inputs.runs_on }}
     timeout-minutes: 180
+
+    permissions:
+      issues: read        # setup-ssh, filter-test-configs
+      pull-requests: read # setup-ssh
+
     env:
       PYTORCH_ROOT: ${{ inputs.PYTORCH_ROOT }}
       BUILDER_ROOT: ${{ inputs.BUILDER_ROOT }}
@@ -105,6 +113,7 @@ jobs:
       PR_NUMBER: ${{ github.event.pull_request.number }}
       PYTORCH_FINAL_PACKAGE_DIR: /artifacts
       SHA1: ${{ github.event.pull_request.head.sha || github.sha }}
+
     steps:
       - name: Make the env permanent during this workflow (but not the secrets)
         shell: bash
